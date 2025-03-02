@@ -186,94 +186,219 @@
             <!-- Applications Card -->
             <div class="mb-4 col-xl-4 col-md-12">
                 <div class="border-4 shadow card h-100 border-start border-success">
-                    <div
-                            class="flex-row py-3 card-header d-flex align-items-center justify-content-between bg-light">
-                            <h6 class="m-0 fw-bold text-success">Academic Applications</h6>
-                            <a href="#" class="btn btn-success btn-sm">
-                                <i class="fas fa-plus me-1"></i> Add Application
-                            </a>
-                        </div>
-                        <div class="card-body">
-                            @if ($student->applications->count() > 0)
-                                <div class="list-group">
-                                    @foreach ($student->applications as $application)
-                                        <a href="#" class="list-group-item list-group-item-action">
-                                            <div class="d-flex w-100 justify-content-between">
-                                                <h6 class="mb-1">{{ $application->academicSession->name }}</h6>
-                                                <small>
-                                                    <span
-                                                        class="badge bg-{{ $application->status_color }}">{{ $application->status }}</span>
-                                                </small>
-                                            </div>
-                                            <small class="text-muted">Applied:
-                                                {{ $application->created_at->format('M d, Y') }}</small>
-                                        </a>
-                                    @endforeach
-                                </div>
-                            @else
-                                <div class="py-4 text-center">
-                                    <i class="mb-3 fas fa-folder-open fa-3x text-muted"></i>
-                                    <p class="mb-0">No applications found for this student.</p>
-                                </div>
-                            @endif
-                        </div>
+                    <div class="flex-row py-3 card-header d-flex align-items-center justify-content-between bg-light">
+                        <h6 class="m-0 fw-bold text-success">Academic Applications</h6>
+                        <a href="#" class="btn btn-success btn-sm">
+                            <i class="fas fa-plus me-1"></i> Add Application
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        @if ($student->applications->count() > 0)
+                            <div class="list-group">
+                                @foreach ($student->applications as $application)
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">{{ $application->academicSession->name }}</h6>
+                                            <small>
+                                                <span
+                                                    class="badge bg-{{ $application->status_color }}">{{ $application->status }}</span>
+                                            </small>
+                                        </div>
+                                        <small class="text-muted">Applied:
+                                            {{ $application->created_at->format('M d, Y') }}</small>
+                                    </a>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="py-4 text-center">
+                                <i class="mb-3 fas fa-folder-open fa-3x text-muted"></i>
+                                <p class="mb-0">No applications found for this student.</p>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Activity Timeline -->
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="mb-4 shadow card">
-                        <div class="py-3 card-header bg-light">
-                            <h6 class="m-0 fw-bold text-primary">Activity Timeline</h6>
-                        </div>
-                        <div class="card-body">
+        <!-- Activity Timeline -->
+        <!-- Activity Timeline -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="mb-4 shadow card">
+                    <div class="py-3 card-header bg-light">
+                        <h6 class="m-0 fw-bold text-primary">Activity Timeline</h6>
+                    </div>
+                    <div class="card-body">
+                        @if (count($activities) > 0)
+                            <div class="timeline">
+                                @foreach ($activities as $activity)
+                                    <div class="timeline-item">
+                                        <div class="timeline-item-marker">
+                                            <div class="timeline-item-marker-text">
+                                                {{ $activity->created_at->format('M d') }}
+                                            </div>
+                                            <div class="timeline-item-marker-indicator bg-primary"></div>
+                                        </div>
+                                        <div class="timeline-item-content">
+                                            <p class="mb-0">
+                                                {{ $activity->description }}
+                                                @if ($activity->properties->count() > 0)
+                                                    <button class="btn btn-sm btn-link" type="button"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#activity-{{ $activity->id }}"
+                                                        aria-expanded="false">
+                                                        <i class="fas fa-caret-down"></i>
+                                                    </button>
+                                                @endif
+                                            </p>
+                                            <small class="text-muted">
+                                                {{ $activity->created_at->diffForHumans() }}
+                                                @if ($activity->causer)
+                                                    by {{ $activity->causer->full_name ?? 'System' }}
+                                                @endif
+                                            </small>
+
+                                            @if ($activity->properties->count() > 0)
+                                                <div class="mt-2 collapse" id="activity-{{ $activity->id }}">
+                                                    <div class="card card-body bg-light">
+                                                        <h6 class="mb-2">Changes:</h6>
+                                                        <ul class="mb-0">
+                                                            @foreach ($activity->properties['attributes'] ?? [] as $key => $value)
+                                                                @if (isset($activity->properties['old'][$key]) && $activity->properties['old'][$key] !== $value)
+                                                                    <li>
+                                                                        <strong>{{ ucfirst($key) }}</strong>:
+                                                                        <span
+                                                                            class="text-danger">{{ $activity->properties['old'][$key] }}</span>
+                                                                        →
+                                                                        <span
+                                                                            class="text-success">{{ $value }}</span>
+                                                                    </li>
+                                                                @elseif(!isset($activity->properties['old'][$key]))
+                                                                    <li>
+                                                                        <strong>{{ ucfirst($key) }}</strong>:
+                                                                        <span
+                                                                            class="text-success">{{ $value }}</span>
+                                                                    </li>
+                                                                @endif
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
                             <div class="py-5 text-center timeline-placeholder">
                                 <i class="mb-3 fas fa-history fa-3x text-muted"></i>
-                                <p class="mb-0">Student activity timeline will appear here.</p>
+                                <p class="mb-0">No activity records found for this student.</p>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Blacklist Modal -->
-        <div class="modal fade" id="blacklistModal" tabindex="-1" aria-labelledby="blacklistModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form action="{{ route('admin.students.toggle-blacklist', $student) }}" method="POST">
-                        @csrf
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="blacklistModalLabel">
-                                {{ $student->is_blacklisted ? 'Remove from Blacklist' : 'Blacklist Student' }}
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            @if ($student->is_blacklisted)
-                                <p>Are you sure you want to remove this student from the blacklist?</p>
-                                <p><strong>Current blacklist reason:</strong> {{ $student->blacklist_reason }}</p>
-                            @else
-                                <p>Are you sure you want to blacklist this student?</p>
-                                <div class="mb-3">
-                                    <label for="blacklist_reason" class="form-label">Reason for blacklisting</label>
-                                    <textarea class="form-control" id="blacklist_reason" name="blacklist_reason" rows="3" required></textarea>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit"
-                                class="btn btn-{{ $student->is_blacklisted ? 'success' : 'danger' }}">
-                                {{ $student->is_blacklisted ? 'Remove from Blacklist' : 'Blacklist Student' }}
-                            </button>
-                        </div>
-                    </form>
-                </div>
+    <!-- Blacklist Modal -->
+    <div class="modal fade" id="blacklistModal" tabindex="-1" aria-labelledby="blacklistModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('admin.students.toggle-blacklist', $student) }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="blacklistModalLabel">
+                            {{ $student->is_blacklisted ? 'Remove from Blacklist' : 'Blacklist Student' }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @if ($student->is_blacklisted)
+                            <p>Are you sure you want to remove this student from the blacklist?</p>
+                            <p><strong>Current blacklist reason:</strong> {{ $student->blacklist_reason }}</p>
+                        @else
+                            <p>Are you sure you want to blacklist this student?</p>
+                            <div class="mb-3">
+                                <label for="blacklist_reason" class="form-label">Reason for blacklisting</label>
+                                <textarea class="form-control" id="blacklist_reason" name="blacklist_reason" rows="3" required></textarea>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-{{ $student->is_blacklisted ? 'success' : 'danger' }}">
+                            {{ $student->is_blacklisted ? 'Remove from Blacklist' : 'Blacklist Student' }}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
+
+    @push('styles')
+        <style>
+            /* Timeline styles */
+            .timeline {
+                position: relative;
+                padding-left: 1.5rem;
+            }
+
+            .timeline:before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0.5rem;
+                height: 100%;
+                width: 2px;
+                background-color: #e3e6ec;
+            }
+
+            .timeline-item {
+                position: relative;
+                padding-bottom: 1.5rem;
+            }
+
+            .timeline-item:last-child {
+                padding-bottom: 0;
+            }
+
+            .timeline-item-marker {
+                position: absolute;
+                left: -1.5rem;
+                width: 1rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .timeline-item-marker-text {
+                font-size: 0.75rem;
+                color: #a2acba;
+                margin-bottom: 0.25rem;
+            }
+
+            .timeline-item-marker-indicator {
+                height: 0.75rem;
+                width: 0.75rem;
+                border-radius: 100%;
+                background-color: #0061f2;
+            }
+
+            .timeline-item-content {
+                padding-left: 1rem;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid #e3e6ec;
+            }
+
+            .timeline-item:last-child .timeline-item-content {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+        </style>
+    @endpush
+    @push('scripts')
+    @endpush
 </x-admin-layout>

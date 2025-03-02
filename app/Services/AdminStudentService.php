@@ -17,7 +17,7 @@ class AdminStudentService
      */
     public function getAllStudents(array $filters = []): LengthAwarePaginator
     {
-        $query = User::whereHas('role', function($q) {
+        $query = User::whereHas('role', function ($q) {
             $q->where('name', 'student');
         });
 
@@ -35,11 +35,11 @@ class AdminStudentService
         // Search functionality
         if (isset($filters['search']) && $filters['search']) {
             $search = $filters['search'];
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('first_name', 'like', "%{$search}%")
-                  ->orWhere('last_name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('id_number', 'like', "%{$search}%");
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('id_number', 'like', "%{$search}%");
             });
         }
 
@@ -92,7 +92,7 @@ class AdminStudentService
         return $student;
     }
 
-     /**
+    /**
      * Update a student
      */
     public function updateStudent(User $student, array $data): User
@@ -146,6 +146,7 @@ class AdminStudentService
         try {
             Mail::to($student->email)
                 ->send(new StudentAccountCreated($student, $password, true));
+          
         } catch (\Exception $e) {
             // Log the error and continue
             logger()->error('Failed to send password reset email to student: ' . $e->getMessage());

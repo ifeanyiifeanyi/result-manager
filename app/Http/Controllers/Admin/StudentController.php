@@ -15,7 +15,7 @@ class StudentController extends Controller
 
     public function __construct(private AdminStudentService $studentService) {}
 
-     /**
+    /**
      * Display a listing of the students.
      */
     public function index(Request $request)
@@ -38,12 +38,23 @@ class StudentController extends Controller
             ->route('admin.students')
             ->with('success', 'Student created successfully. Login credentials have been sent to their email.');
     }
+
     public function show(User $student)
     {
+        // Load the activity logs for this student
+        $activities = \Spatie\Activitylog\Models\Activity::where(function ($query) use ($student) {
+            $query->where('subject_type', get_class($student))
+                ->where('subject_id', $student->id);
+        })->orWhere(function ($query) use ($student) {
+            // Also get activities where this student is the causer
+            $query->where('causer_type', get_class($student))
+                ->where('causer_id', $student->id);
+        })->orderBy('created_at', 'desc')->take(20)->get();
+
         // Load the student's applications
         $student->load('applications.academicSession');
 
-        return view('admin.student.show', compact('student'));
+        return view('admin.student.show', compact('student', 'activities'));
     }
 
     public function edit(User $student)
