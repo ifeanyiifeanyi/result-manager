@@ -36,8 +36,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped">
+                            <table id="datatable-buttons"class="table table-striped table-bordered dt-responsive w-100">
                                 <thead>
                                     <tr>
                                         <th>Application #</th>
@@ -119,7 +118,7 @@
                                     @endforelse
                                 </tbody>
                             </table>
-                        </div>
+
 
                         <div class="mt-4">
                             {{ $applications->links() }}

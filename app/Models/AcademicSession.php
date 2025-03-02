@@ -25,4 +25,7 @@ class AcademicSession extends Model
         return $this->hasMany(Application::class);
     }
 
+    public function students() {
+        return $this->hasMany(User::class);
+    }
 }

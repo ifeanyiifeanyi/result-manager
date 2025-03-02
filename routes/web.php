@@ -71,7 +71,18 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
     Route::controller(AdminStudentController::class)->group(function() {
         Route::get('students', 'index')->name('admin.students');
         Route::get('students/create', 'create')->name('admin.students.create');
+        Route::get('students/{student}/edit', 'edit')->name('admin.students.edit');
+        Route::post('students', 'store')->name('admin.students.store');
+        Route::put('students/{student}', 'update')->name('admin.students.update');
+        Route::delete('students/{student}', 'destroy')->name('admin.students.destroy');
         Route::get('students/{student}', 'show')->name('admin.students.show');
+
+        Route::patch('students/{student}/toggle-active', 'toggleActive')->name('admin.students.toggle-active');
+        Route::patch('students/{student}/toggle-blacklist', 'toggleBlacklist')->name('admin.students.toggle-blacklist');
+        Route::post('students/{student}/reset-password', 'resetPassword')->name('admin.students.reset-password');
+        Route::post('students/{student}/send-verification-email', 'sendVerificationEmail')->name('admin.students.send-verification-email');
+
+
     });
 
 

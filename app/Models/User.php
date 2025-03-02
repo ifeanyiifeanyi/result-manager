@@ -3,7 +3,9 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,7 +13,30 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, LogsActivity;
+
+    /**
+     * Configure the activity log options for this model.
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['full_name', 'email', 'phone', 'address', 'is_active', 'is_blacklisted', 'blacklist_reason'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(function (string $eventName) {
+                return "Student has been {$eventName}";
+            });
+    }
+
+    /**
+     * Get all activity logs for this student.
+     */
+    public function activityLogs()
+    {
+        return $this->morphMany(\Spatie\Activitylog\Models\Activity::class, 'subject');
+    }
+
 
     /**
      * The attributes that are mass assignable.
@@ -49,9 +74,45 @@ class User extends Authenticatable
         'last_login_at',
         'last_login_ip'
     ];
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'is_verified' => 'boolean',
+            'is_active' => 'boolean',
+            'is_blacklisted' => 'boolean',
+            'date_of_birth' => 'date',
+            'gender' => 'string',
+            'id_number' => 'string',
+            'phone' => 'string',
+            'address' => 'string',
+            'city' => 'string',
+            'state' => 'string',
+            'postal_code' => 'string',
+            'country' => 'string',
+            'last_login_at' => 'datetime',
+            'last_login_ip' => 'string'
+        ];
+    }
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var list<string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
 
-    public function role(): BelongsTo{
+    public function role(): BelongsTo
+    {
         return $this->belongsTo(Role::class);
     }
 
@@ -78,49 +139,18 @@ class User extends Authenticatable
 
     public function getDashboardRoute(): string
     {
-        return match($this->role->name) {
+        return match ($this->role->name) {
             'admin' => 'admin.dashboard',
             'student' => 'student.dashboard',
             default => 'login'
         };
     }
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function applications()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'is_verified' => 'boolean',
-            'is_active' => 'boolean',
-            'is_blacklisted' => 'boolean',
-            'date_of_birth' => 'date',
-            'gender' => 'string',
-            'id_number' => 'string',
-            'phone' => 'string',
-            'address' => 'string',
-            'city' => 'string',
-            'state' => 'string',
-            'postal_code' => 'string',
-            'country' => 'string',
-        ];
+        return $this->hasMany(Application::class);
     }
-
-
-
-
+    public function academicSessions()
+    {
+        return $this->belongsToMany(AcademicSession::class);
+    }
 }

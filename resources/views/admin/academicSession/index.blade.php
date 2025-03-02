@@ -15,82 +15,72 @@
                         </button>
                     </div>
                     <div class="card-body">
-                        @if (session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped" id="datatable-responsive">
-                                <thead>
+                        <table id="datatable-buttons"class="table table-striped table-bordered dt-responsive w-100">
+                            <thead>
+                                <tr>
+                                    <th>sn</th>
+                                    <th>Name</th>
+                                    <th>Year</th>
+                                    <th>Status</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($sessions as $session)
                                     <tr>
-                                        <th>sn</th>
-                                        <th>Name</th>
-                                        <th>Year</th>
-                                        <th>Status</th>
-                                        <th>Description</th>
-                                        <th class="text-center">Actions</th>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $session->name }}</td>
+                                        <td>{{ $session->year->format('Y') }}</td>
+                                        <td>
+                                            <span
+                                                class="badge {{ $session->is_active ? 'bg-success' : 'bg-secondary' }}">
+                                                {{ $session->is_active ? 'Active' : 'Inactive' }}
+                                            </span>
+                                        </td>
+                                        <td>{{ Str::limit($session->description, 50) }}</td>
+                                        <td class="text-center">
+                                            <div class="btn-group" role="group">
+                                                <button type="button" class="btn btn-sm btn-info view-session"
+                                                    data-bs-toggle="modal" data-bs-target="#viewSessionModal"
+                                                    data-id="{{ $session->id }}">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-warning edit-session"
+                                                    data-bs-toggle="modal" data-bs-target="#editSessionModal"
+                                                    data-id="{{ $session->id }}">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+
+                                                <form
+                                                    action="{{ route('admin.academic-sessions.toggle-active', $session) }}"
+                                                    method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit"
+                                                        class="btn btn-sm {{ $session->is_active ? 'btn-secondary' : 'btn-success' }}"
+                                                        {{ $session->is_active ? 'title=Deactivate' : 'title=Activate' }}>
+                                                        <i
+                                                            class="fas {{ $session->is_active ? 'fa-power-off' : 'fa-check' }}"></i>
+                                                    </button>
+                                                </form>
+
+                                                <button type="button" class="btn btn-sm btn-danger delete-session"
+                                                    data-bs-toggle="modal" data-bs-target="#deleteSessionModal"
+                                                    data-id="{{ $session->id }}" data-name="{{ $session->name }}">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($sessions as $session)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $session->name }}</td>
-                                            <td>{{ $session->year->format('Y') }}</td>
-                                            <td>
-                                                <span
-                                                    class="badge {{ $session->is_active ? 'bg-success' : 'bg-secondary' }}">
-                                                    {{ $session->is_active ? 'Active' : 'Inactive' }}
-                                                </span>
-                                            </td>
-                                            <td>{{ Str::limit($session->description, 50) }}</td>
-                                            <td class="text-center">
-                                                <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-sm btn-info view-session"
-                                                        data-bs-toggle="modal" data-bs-target="#viewSessionModal"
-                                                        data-id="{{ $session->id }}">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-warning edit-session"
-                                                        data-bs-toggle="modal" data-bs-target="#editSessionModal"
-                                                        data-id="{{ $session->id }}">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center">No academic sessions found.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
 
-                                                    <form
-                                                        action="{{ route('admin.academic-sessions.toggle-active', $session) }}"
-                                                        method="POST" class="d-inline">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <button type="submit"
-                                                            class="btn btn-sm {{ $session->is_active ? 'btn-secondary' : 'btn-success' }}"
-                                                            {{ $session->is_active ? 'title=Deactivate' : 'title=Activate' }}>
-                                                            <i
-                                                                class="fas {{ $session->is_active ? 'fa-power-off' : 'fa-check' }}"></i>
-                                                        </button>
-                                                    </form>
-
-                                                    <button type="button" class="btn btn-sm btn-danger delete-session"
-                                                        data-bs-toggle="modal" data-bs-target="#deleteSessionModal"
-                                                        data-id="{{ $session->id }}"
-                                                        data-name="{{ $session->name }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center">No academic sessions found.</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -98,16 +88,16 @@
     </div>
 
     <!-- Create Session Modal -->
-   @include('admin.academicSession.create')
+    @include('admin.academicSession.create')
 
     <!-- Edit Session Modal -->
-   @include('admin.academicSession.edit')
+    @include('admin.academicSession.edit')
 
     <!-- View Session Modal -->
-   @include('admin.academicSession.show')
+    @include('admin.academicSession.show')
 
     <!-- Delete Confirmation Modal -->
-   @include('admin.academicSession.delete')
+    @include('admin.academicSession.delete')
 
     @push('scripts')
         <script>
@@ -183,8 +173,7 @@
                     // Disable submit button to prevent double submission
                     submitBtn.disabled = true;
                     submitBtn.innerHTML =
-                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating...'
-                    ;
+                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating...';
 
                     // Send AJAX request
                     fetch(form.action, {
@@ -253,8 +242,7 @@
                     // Disable submit button to prevent double submission
                     submitBtn.disabled = true;
                     submitBtn.innerHTML =
-                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Updating...'
-                    ;
+                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Updating...';
 
                     // Need to append the _method field for PUT requests
                     formData.append('_method', 'PUT');

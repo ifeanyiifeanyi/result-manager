@@ -15,7 +15,8 @@
     <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc." />
     <meta name="author" content="{{ config('app.name') }}" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
+    {{-- Add SweetAlert2 CSS --}}
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('adminsrc/assets/images/favicon.ico') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
@@ -37,8 +38,7 @@
 
     <!-- Icons -->
     <link href="{{ asset('adminsrc/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-    {{-- Add SweetAlert2 CSS --}}
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
     @stack('styles')
 
 </head>
@@ -101,6 +101,7 @@
     <!-- END wrapper -->
 
     <!-- Vendor -->
+    <!-- Vendor JS -->
     <script src="{{ asset('adminsrc/assets/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('adminsrc/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('adminsrc/assets/libs/simplebar/simplebar.min.js') }}"></script>
@@ -109,41 +110,30 @@
     <script src="{{ asset('adminsrc/assets/libs/jquery.counterup/jquery.counterup.min.js') }}"></script>
     <script src="{{ asset('adminsrc/assets/libs/feather-icons/feather.min.js') }}"></script>
 
-    <!-- Datatables js -->
+    <!-- Datatables JS -->
     <script src="{{ asset('adminsrc/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-
-    <!-- dataTables.bootstrap5 -->
     <script src="{{ asset('adminsrc/assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('adminsrc/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
-
-    <!-- buttons.colVis -->
     <script src="{{ asset('adminsrc/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js') }}"></script>
     <script src="{{ asset('adminsrc/assets/libs/datatables.net-buttons/js/buttons.flash.min.js') }}"></script>
     <script src="{{ asset('adminsrc/assets/libs/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('adminsrc/assets/libs/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
-
-    <!-- buttons.bootstrap5 -->
     <script src="{{ asset('adminsrc/assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
-
-    <!-- dataTables.keyTable -->
     <script src="{{ asset('adminsrc/assets/libs/datatables.net-keytable/js/dataTables.keyTable.min.js') }}"></script>
     <script src="{{ asset('adminsrc/assets/libs/datatables.net-keytable-bs5/js/keyTable.bootstrap5.min.js') }}"></script>
-
-    <!-- dataTable.responsive -->
     <script src="{{ asset('adminsrc/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('adminsrc/assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js') }}">
     </script>
-
-    <!-- dataTables.select -->
     <script src="{{ asset('adminsrc/assets/libs/datatables.net-select/js/dataTables.select.min.js') }}"></script>
     <script src="{{ asset('adminsrc/assets/libs/datatables.net-select-bs5/js/select.bootstrap5.min.js') }}"></script>
 
-    <!-- Datatable Demo App Js -->
+    <!-- Datatable Initialization -->
     <script src="{{ asset('adminsrc/assets/js/pages/datatable.init.js') }}"></script>
 
-    <!-- App js-->
+    <!-- App JS -->
     <script src="{{ asset('adminsrc/assets/js/app.js') }}"></script>
-    {{-- Add SweetAlert2 JS --}}
+
+    <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // Success Message
