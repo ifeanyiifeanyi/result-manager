@@ -98,6 +98,7 @@ class StudentController extends Controller
             ->with('success', $message);
     }
 
+
     public function resetPassword(User $student)
     {
         $this->studentService->resetPassword($student);
@@ -112,11 +113,16 @@ class StudentController extends Controller
      */
     public function sendVerificationEmail(User $student)
     {
-        // Implementation depends on your verification system
-        // This is just a placeholder
+        $success = $this->studentService->sendVerificationEmail($student);
 
-        return redirect()
-            ->back()
-            ->with('success', 'Verification email has been sent to the student.');
+        if ($success) {
+            return redirect()
+                ->back()
+                ->with('success', 'Verification email has been sent to the student.');
+        } else {
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to send verification email. Please try again later.');
+        }
     }
 }

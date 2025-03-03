@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,27 +16,6 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, LogsActivity;
 
-    /**
-     * Configure the activity log options for this model.
-     */
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['full_name', 'email', 'phone', 'address', 'is_active', 'is_blacklisted', 'blacklist_reason'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(function (string $eventName) {
-                return "Student has been {$eventName}";
-            });
-    }
-
-    /**
-     * Get all activity logs for this student.
-     */
-    public function activityLogs()
-    {
-        return $this->morphMany(\Spatie\Activitylog\Models\Activity::class, 'subject');
-    }
 
 
     /**
@@ -110,6 +90,33 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    /**
+     * Configure the activity log options for this model.
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'first_name',
+                'last_name',
+                'email',
+                'is_active',
+                'is_blacklisted',
+                'blacklist_reason',
+                'email_verified_at'
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
+    /**
+     * Get all activity logs for this student.
+     */
+    public function activityLogs()
+    {
+        return $this->morphMany(\Spatie\Activitylog\Models\Activity::class, 'subject');
+    }
+
 
     public function role(): BelongsTo
     {
@@ -152,5 +159,38 @@ class User extends Authenticatable
     public function academicSessions()
     {
         return $this->belongsToMany(AcademicSession::class);
+    }
+
+    /**
+     * Generate a signed URL for email verification
+     */
+    public function getVerificationUrl(): string
+    {
+        return URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            [
+                'id' => $this->id,
+                'hash' => sha1($this->email),
+            ]
+        );
+    }
+
+    /**
+     * Check if the user has verified their email
+     */
+    public function hasVerifiedEmail(): bool
+    {
+        return $this->email_verified_at !== null;
+    }
+
+    /**
+     * Mark the user's email as verified
+     */
+    public function markEmailAsVerified(): bool
+    {
+        return $this->forceFill([
+            'email_verified_at' => now(),
+        ])->save();
     }
 }

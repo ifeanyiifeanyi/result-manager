@@ -17,6 +17,9 @@ Route::get('/', function () {
 });
 
 
+// Custom verification route
+// Route::get('/verify-email/{id}/{hash}', [VerificationController::class, 'verify'])
+//     ->name('verification.verify');
 
 Route::get('dashboard', DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
 

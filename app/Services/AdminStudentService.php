@@ -4,9 +4,12 @@ namespace App\Services;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Mail\VerifyStudentEmail;
 use App\Mail\StudentAccountCreated;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class AdminStudentService
@@ -79,6 +82,15 @@ class AdminStudentService
             'is_active' => true,
             'username' => $this->generateUsername($data['first_name'], $data['last_name'])
         ]);
+        // Log activity
+        activity()
+            ->causedBy(Auth::user())
+            ->performedOn($student)
+            ->withProperties([
+                'student_id' => $student->id,
+                'student_email' => $student->email
+            ])
+            ->log('created student account');
 
         // Send email with login credentials
         try {
@@ -87,6 +99,14 @@ class AdminStudentService
         } catch (\Exception $e) {
             // Log the error and continue
             logger()->error('Failed to send email to student: ' . $e->getMessage());
+            // Log activity for failed email
+            activity()
+                ->causedBy(Auth::user())
+                ->performedOn($student)
+                ->withProperties([
+                    'error' => $e->getMessage()
+                ])
+                ->log('failed to send student account creation email');
         }
 
         return $student;
@@ -95,19 +115,58 @@ class AdminStudentService
     /**
      * Update a student
      */
+    // public function updateStudent(User $student, array $data): User
+    // {
+    //     $student->update($data);
+
+    //     return $student;
+    // }
     public function updateStudent(User $student, array $data): User
     {
+        $originalData = $student->getOriginal();
         $student->update($data);
+
+        // Log activity with changed attributes
+        activity()
+            ->causedBy(Auth::user())
+            ->performedOn($student)
+            ->withProperties([
+                'old' => $originalData,
+                'new' => $student->getAttributes(),
+                'changed' => array_keys($student->getChanges())
+            ])
+            ->log('updated student information');
+
         return $student;
     }
 
     /**
      * Toggle student's active status
      */
+    // public function toggleActiveStatus(User $student): User
+    // {
+    //     $student->is_active = !$student->is_active;
+    //     $student->save();
+
+    //     return $student;
+    // }
+
     public function toggleActiveStatus(User $student): User
     {
+        $previousStatus = $student->is_active;
         $student->is_active = !$student->is_active;
         $student->save();
+
+        // Log activity
+        activity()
+            ->causedBy(Auth::user())
+            ->performedOn($student)
+            ->withProperties([
+                'from' => $previousStatus,
+                'to' => $student->is_active,
+                'student_email' => $student->email
+            ])
+            ->log($student->is_active ? 'activated student account' : 'deactivated student account');
 
         return $student;
     }
@@ -115,8 +174,24 @@ class AdminStudentService
     /**
      * Toggle student's blacklist status
      */
+    // public function toggleBlacklistStatus(User $student, ?string $reason = null): User
+    // {
+    //     $student->is_blacklisted = !$student->is_blacklisted;
+
+    //     if ($student->is_blacklisted) {
+    //         $student->blacklist_reason = $reason;
+    //     } else {
+    //         $student->blacklist_reason = null;
+    //     }
+
+    //     $student->save();
+
+
+    //     return $student;
+    // }
     public function toggleBlacklistStatus(User $student, ?string $reason = null): User
     {
+        $previousStatus = $student->is_blacklisted;
         $student->is_blacklisted = !$student->is_blacklisted;
 
         if ($student->is_blacklisted) {
@@ -126,6 +201,18 @@ class AdminStudentService
         }
 
         $student->save();
+
+        // Log activity
+        activity()
+            ->causedBy(Auth::user())
+            ->performedOn($student)
+            ->withProperties([
+                'from' => $previousStatus,
+                'to' => $student->is_blacklisted,
+                'reason' => $reason,
+                'student_email' => $student->email
+            ])
+            ->log($student->is_blacklisted ? 'blacklisted student' : 'removed student from blacklist');
 
         return $student;
     }
@@ -142,14 +229,30 @@ class AdminStudentService
         $student->password = Hash::make($password);
         $student->save();
 
+        // Log activity
+        activity()
+            ->causedBy(Auth::user())
+            ->performedOn($student)
+            ->withProperties([
+                'student_email' => $student->email
+            ])
+            ->log('reset student password');
+
         // Send email with new credentials
         try {
             Mail::to($student->email)
                 ->send(new StudentAccountCreated($student, $password, true));
-          
         } catch (\Exception $e) {
             // Log the error and continue
             logger()->error('Failed to send password reset email to student: ' . $e->getMessage());
+            // Log activity for failed email
+            activity()
+                ->causedBy(Auth::user())
+                ->performedOn($student)
+                ->withProperties([
+                    'error' => $e->getMessage()
+                ])
+                ->log('failed to send password reset email');
         }
 
         return $password;
@@ -173,5 +276,39 @@ class AdminStudentService
         }
 
         return $username;
+    }
+
+    public function sendVerificationEmail(User $student): bool
+    {
+        try {
+            // Send verification email
+            Mail::to($student->email)
+                ->send(new VerifyStudentEmail($student));
+
+            // Log activity
+            activity()
+                ->causedBy(Auth::user())
+                ->performedOn($student)
+                ->withProperties([
+                    'student_email' => $student->email
+                ])
+                ->log('sent verification email to student');
+
+            return true;
+        } catch (\Exception $e) {
+            // Log the error and continue
+            logger()->error('Failed to send verification email to student: ' . $e->getMessage());
+
+            // Log activity for failed email
+            activity()
+                ->causedBy(Auth::user())
+                ->performedOn($student)
+                ->withProperties([
+                    'error' => $e->getMessage()
+                ])
+                ->log('failed to send verification email');
+
+            return false;
+        }
     }
 }

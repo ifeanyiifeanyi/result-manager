@@ -308,6 +308,7 @@
             <div class="modal-content">
                 <form action="{{ route('admin.students.toggle-blacklist', $student) }}" method="POST">
                     @csrf
+                    @method('PATCH')
                     <div class="modal-header">
                         <h5 class="modal-title" id="blacklistModalLabel">
                             {{ $student->is_blacklisted ? 'Remove from Blacklist' : 'Blacklist Student' }}
