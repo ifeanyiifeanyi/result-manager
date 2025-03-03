@@ -7,7 +7,7 @@
         <!-- Page Heading -->
         <div class="mb-4 d-sm-flex align-items-center justify-content-between">
             <h1 class="mb-0 text-gray-800 h3">Create New Student</h1>
-            <a href="{{ route('admin.students.index') }}" class="btn btn-secondary">
+            <a href="{{ route('admin.students') }}" class="btn btn-secondary">
                 <i class="mr-1 fas fa-arrow-left"></i> Back to Students
             </a>
         </div>

@@ -35,6 +35,13 @@
                 </li>
 
                 <li>
+                    <a href="{{ route('admin.analytics') }}">
+                        <i data-feather="home"></i>
+                        <span> Analytics </span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="{{ route('admin.academic-sessions') }}">
                         <i data-feather="home"></i>
                         <span> Academic Session </span>
@@ -112,7 +119,7 @@
                             <li>
                                 <a href="{{ route('admin.students.create') }}">Create Student</a>
                             </li>
-                           
+
                             <li>
                                 <a href="ui-typography.html">Typography</a>
                             </li>
