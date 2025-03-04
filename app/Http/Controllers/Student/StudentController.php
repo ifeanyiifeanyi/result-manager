@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Student;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Services\StudentProfileService;
 
 class StudentController extends Controller
 {
-    public function dashboard()
+    public function dashboard(StudentProfileService $profileService)
     {
         $user = request()->user();
-        return view('student.dashboard', compact('user'));
+        $missingFields = $profileService->getMissingRequiredFields($user);
+        return view('student.dashboard', compact('user', 'missingFields'));
     }
 }

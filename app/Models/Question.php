@@ -22,6 +22,31 @@ class Question extends Model
         'display_order' => 'integer',
     ];
 
+    // Accessor to ensure options is always an array
+    public function getOptionsAttribute($value)
+    {
+        // If value is null or empty string, return an empty array
+        if (empty($value)) {
+            return [];
+        }
+
+        // If it's already an array, return it
+        if (is_array($value)) {
+            return $value;
+        }
+
+        // If it's a JSON string, decode it
+        return json_decode($value, true) ?? [];
+    }
+
+    // Mutator to ensure options is stored as a JSON string
+    public function setOptionsAttribute($value)
+    {
+        // Ensure it's an array
+        $this->attributes['options'] = is_array($value)
+            ? json_encode($value)
+            : json_encode([]);
+    }
 
     // Add this to the Question model
     protected static function boot()

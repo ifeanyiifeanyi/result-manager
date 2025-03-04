@@ -5,8 +5,7 @@
     <div class="row gy-4">
         <div class="col-lg-9">
             <!-- Grettings Box Start -->
-            <div
-                class="overflow-hidden flex-wrap gap-16 grettings-box position-relative rounded-16 bg-main-600 z-1">
+            <div class="overflow-hidden flex-wrap gap-16 grettings-box position-relative rounded-16 bg-main-600 z-1">
                 <img src="/studentsrc/assets/images/bg/grettings-pattern.png" alt=""
                     class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100 opacity-6">
                 <div class="row gy-4">
@@ -27,7 +26,22 @@
             </div>
             <!-- Grettings Box End -->
 
-
+            @if (count($missingFields) > 0)
+                <div class="mt-4 mb-4 alert alert-warning alert-missing-details">
+                    <h5><i class="fas fa-exclamation-triangle me-2"></i> Complete Your Profile</h5>
+                    <p>Please update the following information to complete your profile:</p>
+                    <ul class="mb-0">
+                        @foreach ($missingFields as $field => $label)
+                            <li>{{ $label }}</li>
+                        @endforeach
+                    </ul>
+                    <div class="mt-3">
+                        <a href="{{ route('student.profile.show') }}" class="btn btn-sm btn-warning">
+                            <i class="fas fa-edit me-1"></i> Update Now
+                        </a>
+                    </div>
+                </div>
+            @endif
         </div>
         <div class="col-lg-3">
 
@@ -54,7 +68,6 @@
                         </div>
                         <div class="days"></div>
                     </div>
-
 
                 </div>
             </div>

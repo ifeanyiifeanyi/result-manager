@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AcademicSessionController;
 use App\Http\Controllers\Admin\StudentController as AdminStudentController;
+use App\Http\Controllers\Student\ApplicationProcessController;
 use App\Http\Controllers\Student\StudentProfileController;
 
 Route::get('/', function () {
@@ -109,6 +110,11 @@ Route::prefix('student')->middleware(['auth', 'verified', 'role:student'])->grou
         Route::put('profile/password', 'updatePassword')->name('student.profile.password');
         Route::post('profile/logout-session', 'logoutSession')->name('student.profile.logout_session');
 
+    });
+
+    Route::controller(ApplicationProcessController::class)->group(function(){
+        Route::get('application', 'showApplicationForm')->name('student.application.start');
+        Route::post('application/submit', 'submitApplication')->name('student.application.submit');
     });
 });
 

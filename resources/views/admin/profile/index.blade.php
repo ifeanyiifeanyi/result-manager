@@ -554,10 +554,7 @@
         </div>
     </div>
 
-    @push('styles')<x-student-layout>
-    <x-slot name="title">
-        {{ __('Profile') }}
-    </x-slot>
+   
 
     <div class="container py-4">
         @if (session('success'))

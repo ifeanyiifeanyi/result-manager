@@ -41,10 +41,10 @@ class Application extends Model
     const PAYMENT_FAILED = 'failed';
 
 
-    // public function payments()
-    // {
-    //     return $this->hasMany(Payment::class);
-    // }
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 
     // Scope to get applications that are still pending payment
     public function scopePendingPayment($query)
@@ -84,10 +84,10 @@ class Application extends Model
         return $this->belongsTo(AcademicSession::class);
     }
 
-    // public function answers()
-    // {
-    //     return $this->hasMany(ApplicationAnswer::class);
-    // }
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
 
     public function questions()
     {

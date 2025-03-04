@@ -40,9 +40,9 @@
                     <!-- Submenu End -->
                 </li>
                 <li class="sidebar-menu__item">
-                    <a href="students.html" class="sidebar-menu__link">
+                    <a href="{{ route('student.application.start') }}" class="sidebar-menu__link {{ request()->routeIs('student.application.start') ? 'active' : '' }}">
                         <span class="icon"><i class="ph ph-users-three"></i></span>
-                        <span class="text">Students</span>
+                        <span class="text">Start Application</span>
                     </a>
                 </li>
 
