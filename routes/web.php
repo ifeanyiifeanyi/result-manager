@@ -29,6 +29,7 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
 
     Route::controller(AdminController::class)->group(function () {
         Route::get('dashboard', 'dashboard')->name('admin.dashboard');
+        Route::get('logout', 'logout')->name('admin.logout');
     });
 
     Route::controller(AdminProfileController::class)->group(function () {
@@ -98,7 +99,7 @@ Route::prefix('student')->middleware(['auth', 'verified', 'role:student'])->grou
 
     Route::controller(StudentController::class)->group(function () {
         Route::get('dashboard', 'dashboard')->name('student.dashboard');
-        Route::post('logout', 'logout')->name('student.logout');
+        Route::get('logout', 'logout')->name('student.logout');
     });
 
 

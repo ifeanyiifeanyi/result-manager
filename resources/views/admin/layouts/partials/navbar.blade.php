@@ -7,7 +7,7 @@
                         <i data-feather="menu" class="noti-icon"></i>
                     </button>
                 </li>
-               
+
             </ul>
             <ul class="mb-0 list-unstyled topnav-menu d-flex align-items-center">
 
@@ -80,7 +80,7 @@
                         <div class="dropdown-divider"></div>
 
                         <!-- item-->
-                        <a href="auth-logout.html" class="dropdown-item notify-item">
+                        <a href="{{ route('admin.logout') }}" class="dropdown-item notify-item">
                             <i class="align-middle mdi mdi-location-exit fs-16"></i>
                             <span>Logout</span>
                         </a>

@@ -5,16 +5,6 @@
         <button type="button" class="text-gray-500 toggle-btn d-xl-none d-flex text-26"><i
                 class="ph ph-list"></i></button>
         <!-- Toggle Button End -->
-
-        <form action="#" class="w-350 d-sm-block d-none">
-            <div class="position-relative">
-                <button type="submit" class="text-xl text-gray-100 input-icon d-flex pointer-event-none"><i
-                        class="ph ph-magnifying-glass"></i></button>
-                <input type="text"
-                    class="h-40 border-transparent form-control ps-40 focus-border-main-600 bg-main-50 rounded-pill placeholder-15"
-                    placeholder="Search...">
-            </div>
-        </form>
     </div>
 
     <div class="gap-16 flex-align">
@@ -59,7 +49,7 @@
                                 </a>
                             </li>
                             <li class="pt-8 border-gray-100 border-top">
-                                <a href="sign-in.html"
+                                <a href="{{ route('student.logout') }}"
                                     class="gap-8 px-20 py-12 text-gray-300 text-15 hover-bg-danger-50 hover-text-danger-600 rounded-8 flex-align fw-medium">
                                     <span class="text-2xl text-danger-600 d-flex"><i
                                             class="ph ph-sign-out"></i></span>

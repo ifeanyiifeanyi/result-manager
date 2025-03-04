@@ -9,6 +9,7 @@ class Answer extends Model
 {
     protected $fillable = [
         'question_id',
+        'application_id',
         'user_id',
         'answer',
     ];

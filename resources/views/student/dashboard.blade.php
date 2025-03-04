@@ -11,20 +11,19 @@
                 <div class="row gy-4">
                     <div class="col-sm-7">
                         <div class="grettings-box__content py-xl-4">
-                            <h2 class="mb-0 text-white">Hello, {{ Str::title($user->first_name) }}! </h2>
-                            <p class="mt-4 text-white text-15 fw-light">Let’s learning something today</p>
-                            <p class="mt-24 text-lg text-white fw-light">Set your study plan and growth with
-                                community</p>
+                            <h2 class="mb-0 text-white">Hello, {{ Str::title($user->first_name) }}!</h2>
+                            <p class="mt-4 text-white text-15 fw-light">Your journey to higher education begins today!</p>
+                            <p class="mt-24 text-lg text-white fw-light">Start preparing your application, set your goals, and take the first step towards your future.</p>
+                            @if($user->applications->isEmpty())
+                                <a href="{{ route('student.application.start') }}" class="mt-4 btn btn-info">Start Application <i class="fas fa-arrow-right"></i> </a>
+                            @endif
                         </div>
                     </div>
-                    <div class="col-sm-5 d-sm-block d-none">
-                        <div class="text-center h-100 d-flex justify-content-center align-items-end">
-                            <img src="/studentsrc/assets/images/thumbs/gretting-img.png" alt="">
-                        </div>
-                    </div>
+
                 </div>
             </div>
             <!-- Grettings Box End -->
+
 
             @if (count($missingFields) > 0)
                 <div class="mt-4 mb-4 alert alert-warning alert-missing-details">
@@ -72,9 +71,6 @@
                 </div>
             </div>
             <!-- Calendar End -->
-
-
-
         </div>
     </div>
 </x-student-layout>

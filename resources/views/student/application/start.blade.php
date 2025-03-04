@@ -27,7 +27,7 @@
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        @endif
+        @else
 
         {{-- Application Form Container --}}
         <div class="row">
@@ -44,13 +44,9 @@
                         @if ($application)
                             <div class="alert alert-info">
                                 <h5>{{ __('Existing Application') }}</h5>
-                                <p>{{ __('You have already started an application for this academic session.') }}</p>
+                                <p>{{ __('You have already applied for this academic session.') }}</p>
                                 <div class="mt-3">
-                                    <a href="{{ route('student.application.continue') }}"
-                                        class="btn btn-primary btn-sm me-2">
-                                        <i class="fas fa-edit me-1"></i> {{ __('Continue Application') }}
-                                    </a>
-                                    <a href="{{ route('student.application.status') }}" class="btn btn-info btn-sm">
+                                    <a href="" class="btn btn-info btn-sm">
                                         <i class="fas fa-eye me-1"></i> {{ __('View Status') }}
                                     </a>
                                 </div>
@@ -106,7 +102,9 @@
                                                             ? $decodedOptions['options']
                                                             : [];
                                                 @endphp
-                                                <div class="gap-3 d-flex flex-column"> <!-- Increased from gap-2 to gap-3 -->
+                                                <div class="gap-3 d-flex flex-column">
+                                                    <small class="text-muted">single choice selection allowed !!</small>
+
                                                     @foreach ($options as $option)
                                                         <div class="form-check">
                                                             <input type="radio"
@@ -117,7 +115,7 @@
                                                                 {{ $question->is_required ? 'required' : '' }}>
                                                             <label class="form-check-label"
                                                                 for="radio_{{ $question->id }}_{{ $loop->index }}">
-                                                                {{ ucfirst($option) }}
+                                                                {{ Str::title($option) }}
                                                             </label>
                                                         </div>
                                                     @endforeach
@@ -140,7 +138,9 @@
                                                             ? $decodedOptions['options']
                                                             : [];
                                                 @endphp
-                                                <div class="gap-3 d-flex flex-column"> <!-- Increased from gap-2 to gap-3 -->
+                                                <div class="gap-3 d-flex flex-column">
+                                                    <small class="text-muted">multiple choices selection allowed !!</small>
+
                                                     @foreach ($options as $option)
                                                         <div class="form-check">
                                                             <input type="checkbox"
@@ -149,9 +149,10 @@
                                                                 id="check_{{ $question->id }}_{{ $loop->index }}"
                                                                 value="{{ $option }}"
                                                                 {{ $question->is_required && $loop->first ? 'required' : '' }}>
+
                                                             <label class="form-check-label"
                                                                 for="check_{{ $question->id }}_{{ $loop->index }}">
-                                                                {{ ucfirst($option) }}
+                                                                {{ Str::title($option) }}
                                                             </label>
                                                         </div>
                                                     @endforeach
@@ -221,6 +222,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 
     @push('styles')
@@ -245,3 +247,4 @@
     @push('scripts')
     @endpush
 </x-student-layout>
+

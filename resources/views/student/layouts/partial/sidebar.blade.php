@@ -20,32 +20,26 @@
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="sidebar-menu__item has-dropdown">
-                    <a href="javascript:void(0)" class="sidebar-menu__link">
-                        <span class="icon"><i class="ph ph-graduation-cap"></i></span>
-                        <span class="text">Courses</span>
-                    </a>
-                    <!-- Submenu start -->
-                    <ul class="sidebar-submenu">
-                        <li class="sidebar-submenu__item">
-                            <a href="student-courses.html" class="sidebar-submenu__link"> Student Courses </a>
-                        </li>
-                        <li class="sidebar-submenu__item">
-                            <a href="mentor-courses.html" class="sidebar-submenu__link"> Mentor Courses </a>
-                        </li>
-                        <li class="sidebar-submenu__item">
-                            <a href="create-course.html" class="sidebar-submenu__link"> Create Course </a>
-                        </li>
-                    </ul>
-                    <!-- Submenu End -->
-                </li>
                 <li class="sidebar-menu__item">
                     <a href="{{ route('student.application.start') }}" class="sidebar-menu__link {{ request()->routeIs('student.application.start') ? 'active' : '' }}">
-                        <span class="icon"><i class="ph ph-users-three"></i></span>
+                        <span class="icon"><i class="ph ph-user"></i></span>
                         <span class="text">Start Application</span>
                     </a>
                 </li>
 
+                 <li class="sidebar-menu__item">
+                    <a href="{{ route('student.profile.show') }}" class="sidebar-menu__link {{ request()->routeIs('student.profile.show') ? 'active' : '' }}">
+                        <span class="icon"><i class="ph ph-users-three"></i></span>
+                        <span class="text">Profile</span>
+                    </a>
+                </li>
+                <hr>
+                <li class="sidebar-menu__item">
+                    <a href="{{ route('student.logout') }}" class="sidebar-menu__link">
+                        <span class="icon"><i class="ph ph-sign-out"></i></span>
+                        <span class="text">Log Out</span>
+                    </a>
+                </li>
 
             </ul>
         </div>
