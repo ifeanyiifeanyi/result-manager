@@ -38,6 +38,8 @@
     <link rel="stylesheet" href="{{ asset('studentsrc/assets/css/jquery-jvectormap-2.0.5.css') }}">
     <!-- Main css -->
     <link rel="stylesheet" href="{{ asset('studentsrc/assets/css/main.css') }}">
+    {{-- Add SweetAlert2 CSS --}}
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <style>
         .active {
             color: #4a98f5 !important;
@@ -63,80 +65,19 @@
 
     <!-- ============================ Sidebar Start ============================ -->
 
-   @include('student.layouts.partial.sidebar')
+    @include('student.layouts.partial.sidebar')
     <!-- ============================ Sidebar End  ============================ -->
 
 
     <div class="dashboard-main-wrapper">
 
-       @include('student.layouts.partial.navbar')
+        @include('student.layouts.partial.navbar')
 
 
         <div class="dashboard-body">
 
             {{ $slot }}
-            <div class="row gy-4">
-                <div class="col-lg-9">
-                    <!-- Grettings Box Start -->
-                    <div
-                        class="overflow-hidden flex-wrap gap-16 grettings-box position-relative rounded-16 bg-main-600 z-1">
-                        <img src="/studentsrc/assets/images/bg/grettings-pattern.png" alt=""
-                            class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100 opacity-6">
-                        <div class="row gy-4">
-                            <div class="col-sm-7">
-                                <div class="grettings-box__content py-xl-4">
-                                    <h2 class="mb-0 text-white">Hello, {{ Str::title($user->first_name) }}! </h2>
-                                    <p class="mt-4 text-white text-15 fw-light">Let’s learning something today</p>
-                                    <p class="mt-24 text-lg text-white fw-light">Set your study plan and growth with
-                                        community</p>
-                                </div>
-                            </div>
-                            <div class="col-sm-5 d-sm-block d-none">
-                                <div class="text-center h-100 d-flex justify-content-center align-items-end">
-                                    <img src="/studentsrc/assets/images/thumbs/gretting-img.png" alt="">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Grettings Box End -->
 
-
-                </div>
-                <div class="col-lg-3">
-
-                    <!-- Calendar Start -->
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="calendar">
-                                <div class="calendar__header">
-                                    <button type="button" class="calendar__arrow left"><i
-                                            class="ph ph-caret-left"></i></button>
-                                    <p class="mb-0 display h6">""</p>
-                                    <button type="button" class="calendar__arrow right"><i
-                                            class="ph ph-caret-right"></i></button>
-                                </div>
-
-                                <div class="calendar__week week">
-                                    <div class="calendar__week-text">Su</div>
-                                    <div class="calendar__week-text">Mo</div>
-                                    <div class="calendar__week-text">Tu</div>
-                                    <div class="calendar__week-text">We</div>
-                                    <div class="calendar__week-text">Th</div>
-                                    <div class="calendar__week-text">Fr</div>
-                                    <div class="calendar__week-text">Sa</div>
-                                </div>
-                                <div class="days"></div>
-                            </div>
-
-
-                        </div>
-                    </div>
-                    <!-- Calendar End -->
-
-
-
-                </div>
-            </div>
         </div>
 
         @include('student.layouts.partial.footer')
@@ -171,9 +112,65 @@
 
     <!-- main js -->
     <script src="{{ asset('studentsrc/assets/js/main.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Success Message
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: "{{ session('success') }}",
+                timer: 3000,
+                timerProgressBar: true
+            });
+        @endif
 
+        // Error Message
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: "{{ session('error') }}",
+                timer: 3000,
+                timerProgressBar: true
+            });
+        @endif
 
-@stack('scripts')
+        // Warning Message
+        @if (session('warning'))
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning!',
+                text: "{{ session('warning') }}",
+                timer: 3000,
+                timerProgressBar: true
+            });
+        @endif
+
+        // Handle Validation Errors
+        @if ($errors->any())
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Error',
+                text: "{!! implode('\n', $errors->all()) !!}",
+                timer: 3000,
+                timerProgressBar: true
+            });
+        @endif
+
+        // Handle Exception
+        @if (session('exception'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Exception Occurred!',
+                text: "{{ session('exception') }}",
+                timer: 3000,
+                timerProgressBar: true
+            });
+        @endif
+    </script>
+
+    @stack('scripts')
 </body>
 
 </html>

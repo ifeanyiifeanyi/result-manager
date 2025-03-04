@@ -116,6 +116,7 @@ class AdminProfileController extends Controller
             if ($user->photo && file_exists(public_path($user->photo))) {
                 $croppedImage = $manager->read(public_path($user->photo));
             } else {
+                
                 // Use a placeholder image
                 $croppedImage = $manager->read(public_path('images/no-img.png'));
             }

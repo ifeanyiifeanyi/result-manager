@@ -18,7 +18,7 @@
     </div>
 
     <div class="gap-16 flex-align">
-       
+
 
 
         <!-- User Profile Start -->
@@ -44,7 +44,7 @@
                         </div>
                         <ul class="overflow-y-auto max-h-270 scroll-sm pe-4">
                             <li class="mb-4">
-                                <a href="setting.html"
+                                <a href="{{ route('student.profile.show') }}"
                                     class="gap-8 px-20 py-12 text-gray-300 text-15 hover-bg-gray-50 rounded-8 flex-align fw-medium">
                                     <span class="text-2xl text-primary-600 d-flex"><i class="ph ph-gear"></i></span>
                                     <span class="text">Account Settings</span>

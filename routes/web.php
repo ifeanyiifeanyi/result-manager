@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AcademicSessionController;
 use App\Http\Controllers\Admin\StudentController as AdminStudentController;
+use App\Http\Controllers\Student\StudentProfileController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -97,6 +98,17 @@ Route::prefix('student')->middleware(['auth', 'verified', 'role:student'])->grou
     Route::controller(StudentController::class)->group(function () {
         Route::get('dashboard', 'dashboard')->name('student.dashboard');
         Route::post('logout', 'logout')->name('student.logout');
+    });
+
+
+
+    Route::controller(StudentProfileController::class)->group(function () {
+        Route::get('profile', 'show')->name('student.profile.show');
+        Route::put('profile', 'update')->name('student.profile.update');
+        Route::post('profile/photo', 'updatePhoto')->name('student.profile.photo');
+        Route::put('profile/password', 'updatePassword')->name('student.profile.password');
+        Route::post('profile/logout-session', 'logoutSession')->name('student.profile.logout_session');
+
     });
 });
 
