@@ -21,6 +21,7 @@ class StudentLayout extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('student.layouts.app');
+        $user = request()->user();
+        return view('student.layouts.app', compact('user'));
     }
 }
