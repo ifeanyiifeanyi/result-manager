@@ -120,6 +120,7 @@ Route::prefix('student')->middleware(['auth', 'verified', 'role:student'])->grou
         // Route::get('/payment/callback', 'handlePaymentCallback' )->name('payment.callback');
 
         Route::get('application/awaiting-results', 'showAwaitingResults')->name('student.application.awaiting-results');
+        Route::get('application/status', 'showApplicationStatus')->name('student.application.status');
     });
 });
 
