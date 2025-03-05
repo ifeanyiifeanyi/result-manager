@@ -43,7 +43,8 @@ class SchoolController extends Controller
         // Update school via service
         $this->schoolService->updateSchool(
             $validatedData,
-            $request->hasFile('logo') ? $request->file('logo') : null
+            $request->hasFile('logo') ? $request->file('logo') : null,
+            $request->hasFile('favicon') ? $request->file('favicon') : null
         );
 
         return redirect()

@@ -83,7 +83,7 @@
                                             <div class="col-md-8">
                                                 <h5 class="mb-1 text-muted">{{ __('Fee Description') }}</h5>
                                                 @if ($school->fee_description)
-                                                    <p>{{ $school->fee_description }}</p>
+                                                    <p class="p-3 rounded bg-light">{{ $school->fee_description }}</p>
                                                 @else
                                                     <p class="text-muted">No description available</p>
                                                 @endif
@@ -98,6 +98,14 @@
                                 <h5 class="mb-2 text-muted">{{ __('School Description') }}</h5>
                                 <div class="p-3 rounded bg-light">
                                     {!! $school->description ?? '<em>No description available</em>' !!}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 row">
+                            <div class="col-md-12">
+                                <h5 class="mb-2 text-muted">{{ __('Short Description') }}</h5>
+                                <div class="p-3 rounded bg-light">
+                                    {!! $school->short_description ?? '<em>No short description available</em>' !!}
                                 </div>
                             </div>
                         </div>
@@ -154,6 +162,25 @@
                         </div>
                     </div>
                 </div>
+                <!-- Favicon Card -->
+                @if ($school->favicon)
+                    <div class="mb-4 card">
+                        <div class="text-white card-header bg-dark">
+                            <h4 class="mb-0 card-title">{{ __('Favicon') }}</h4>
+                        </div>
+                        <div class="text-center card-body">
+                            <div class=mb-4">
+                                <img style="max-height: 200px;" src="{{ asset($school->favicon) }}" alt="Favicon"
+                                    class="rounded-circle img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <div class="p-5 rounded border bg-light">
+                        <i class="fas fa-school fa-4x text-muted"></i>
+                        <p class="mt-3 text-muted">No favicon uploaded</p>
+                    </div>
+                @endif
 
                 <!-- Social Media Links Card -->
                 <div class="mb-4 card">
@@ -218,6 +245,40 @@
                         </div>
                     </div>
                 @endif
+                <div class="mt-3 row">
+                    <div class="col-md-12">
+                        <h5 class="mb-2 text-muted">{{ __('Short Description') }}</h5>
+                        <div class="p-3 rounded bg-light">
+                            {!! $school->short_description ?? '<em>No short description available</em>' !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-4 card">
+                    <div class="text-white card-header bg-warning">
+                        <h4 class="mb-0 card-title">{{ __('Additional Settings') }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <h5 class="mb-1 text-muted">{{ __('Navbar Color') }}</h5>
+                            @if ($school->navbar_color)
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded me-2" style="width: 30px; height: 30px; background-color: {{ $school->navbar_color }}"></div>
+                                    <p>{{ $school->navbar_color }}</p>
+                                </div>
+                            @else
+                                <p class="text-muted">Not set</p>
+                            @endif
+                        </div>
+                        <div class="mb-3">
+                            <h5 class="mb-1 text-muted">{{ __('Paystack Subaccount Code') }}</h5>
+                            <p>{{ $school->paystack_subaccount_code ?? 'Not set' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
             </div>
         </div>
     </div>

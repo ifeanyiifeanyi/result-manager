@@ -28,7 +28,7 @@ class SchoolSettingRequest extends FormRequest
             'phone' => 'required|string|max:20',
             'address' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'facebook' => 'nullable|url|max:255',
             'twitter' => 'nullable|url|max:255',
             'instagram' => 'nullable|url|max:255',
@@ -39,6 +39,10 @@ class SchoolSettingRequest extends FormRequest
             'meta_keywords' => 'nullable|string',
             'admission_fee' => 'nullable|numeric|min:0',
             'fee_description' => 'nullable|string',
+            'short_description' => 'nullable|string',
+            'favicon' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'navbar_color' => 'nullable|string|max:255',
+            'paystack_subaccount_code' => 'nullable|string|max:255',
         ];
     }
 }

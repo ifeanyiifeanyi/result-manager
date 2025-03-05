@@ -20,7 +20,8 @@ class SchoolService
      * @param UploadedFile|null $logo
      * @return School
      */
-    public function updateSchool(array $data, ?UploadedFile $logo = null): School
+
+    public function updateSchool(array $data, ?UploadedFile $logo = null, ?UploadedFile $favicon = null): School
     {
         $school = $this->getSchool();
 
@@ -35,6 +36,20 @@ class SchoolService
             $logoPath = $logo->store('school', 'public');
             $data['logo'] = 'storage/' . $logoPath;
         }
+
+        // Handle favicon upload if provided
+        if ($favicon) {
+            // Delete old favicon if exists
+            if ($school->favicon && Storage::exists('public/' . $school->favicon)) {
+                Storage::delete('public/' . $school->favicon);
+            }
+
+            // Store new favicon
+            $faviconPath = $favicon->store('school', 'public');
+            $data['favicon'] = 'storage/' . $faviconPath;
+        }
+
+
 
         // Update school data
         $school->fill($data);

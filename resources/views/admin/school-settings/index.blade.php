@@ -116,7 +116,7 @@
                                 <div class="mb-3 col-md-12">
                                     <label class="form-label">School Logo</label>
                                     <div class="row">
-                                        <div class="col-md-9">
+                                        <div class="col-md-6">
                                             <div class="text-center">
                                                 <!-- Clickable logo container -->
                                                 <div class="p-3 rounded border cursor-pointer"
@@ -147,8 +147,73 @@
                                                 <p class="mt-2 text-muted">Click on the image to select a new logo</p>
                                             </div>
                                         </div>
+                                        <div class="col-md-6">
+                                            <div class="text-center">
+                                                <!-- Clickable favicon container -->
+                                                <div class="p-3 rounded border cursor-pointer"
+                                                    style="height: 150px; width: 150px; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer;"
+                                                    onclick="document.getElementById('favicon').click()">
 
+                                                    @if (!empty($school->favicon))
+                                                        <img id="favicon-preview" src="{{ asset($school->favicon) }}"
+                                                            alt="School Favicon" class="img-fluid"
+                                                            style="max-height: 100%; max-width: 100%;">
+                                                    @else
+                                                        <img id="favicon-preview" src="{{ asset('no-img.png') }}"
+                                                            alt="No Favicon" class="img-fluid"
+                                                            style="max-height: 100%; max-width: 100%; opacity: 0.3;">
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <!-- Hidden file input -->
+                                                <input type="file"
+                                                    class="d-none @error('favicon') is-invalid @enderror"
+                                                    id="favicon" name="favicon" accept="image/*"
+                                                    onchange="previewImage(this)">
+                                                <small class="text-muted">Recommended size: 64x64px. Max file size:
+                                                    2MB</small>
+                                                @error('favicon')
+                                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                                @enderror
+                                                <p class="mt-2 text-muted">Click on the image to select a new site
+                                                    favicon</p>
+                                            </div>
+                                        </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="mb-5 row">
+                                <div class="col-md-7">
+                                    <div class="form-group">
+                                        <label for="short_description">Short Description</label>
+                                        <textarea name="short_description" id="short_description" class="form-control @error('short_description') is-invalid @enderror">{{ $school->short_description ?? '' }}</textarea>
+                                        @error('short_description')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+
+                                    <div class="mb-3 form-group">
+                                        <label for="navbar_color">Navbar Color</label>
+                                        <input type="color" name="navbar_color" class="form-control @error('navbar_color') is-invalid @enderror"
+                                            id="navbar_color" value="{{ $school->navbar_color ?? '' }}">
+                                        @error('navbar_color')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-3 form-group">
+                                        <label for="paystack_subaccount_code">Paystack Subaccount Code</label>
+                                        <input type="text" name="paystack_subaccount_code"
+                                            id="paystack_subaccount_code" class="form-control @error('paystack_subaccount_code') is-invalid @enderror"
+                                            value="{{ $school->paystack_subaccount_code ?? '' }}">
+                                        @error('paystack_subaccount_code')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
                                 </div>
                             </div>
 
@@ -294,9 +359,10 @@
         <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
 
         <script>
-            // Preview image functionality
             function previewImage(input) {
-                const preview = document.getElementById('logo-preview');
+                // Determine whether it's a logo or favicon based on the input's ID
+                const previewId = input.id === 'logo' ? 'logo-preview' : 'favicon-preview';
+                const preview = document.getElementById(previewId);
 
                 if (input.files && input.files[0]) {
                     const reader = new FileReader();
@@ -308,8 +374,17 @@
 
                     reader.readAsDataURL(input.files[0]);
                 } else {
-                    preview.src = "{{ !empty($school->logo) ? asset($school->logo) : asset('images/no-image.png') }}";
-                    preview.style.opacity = "{{ !empty($school->logo) ? '1' : '0.3' }}";
+                    // Fallback to existing logo or favicon, or default no-image
+                    const fallbackSrc = input.id === 'logo' ?
+                        "{{ !empty($school->logo) ? asset($school->logo) : asset('no-img.png') }}" :
+                        "{{ !empty($school->favicon) ? asset($school->favicon) : asset('no-img.png') }}";
+
+                    const fallbackOpacity = input.id === 'logo' ?
+                        "{{ !empty($school->logo) ? '1' : '0.3' }}" :
+                        "{{ !empty($school->favicon) ? '1' : '0.3' }}";
+
+                    preview.src = fallbackSrc;
+                    preview.style.opacity = fallbackOpacity;
                 }
             }
 

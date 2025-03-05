@@ -23,6 +23,11 @@ class School extends Model
         'meta_keywords',
         'admission_fee',
         'fee_description',
+
+        'short_description',
+        'favicon',
+        'navbar_color',
+        'paystack_subaccount_code',
     ];
 
     public function getAdmissionFeeAttribute($fee)
