@@ -116,8 +116,17 @@ Route::prefix('student')->middleware(['auth', 'verified', 'role:student'])->grou
     Route::controller(ApplicationProcessController::class)->group(function(){
         Route::get('application', 'showApplicationForm')->name('student.application.start');
         Route::post('application/submit', 'submitApplication')->name('student.application.submit');
+
+        // Route::get('/payment/callback', 'handlePaymentCallback' )->name('payment.callback');
+
+        Route::get('application/awaiting-results', 'showAwaitingResults')->name('student.application.awaiting-results');
     });
 });
 
+
+
+Route::get('/payment/callback', [ApplicationProcessController::class, 'handlePaymentCallback'])
+    ->name('payment.callback')
+    ->withoutMiddleware(['csrf']);
 
 require __DIR__ . '/auth.php';

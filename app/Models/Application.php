@@ -37,7 +37,7 @@ class Application extends Model
 
     // Possible payment statuses
     const PAYMENT_PENDING = 'pending';
-    const PAYMENT_PAID = 'paid';
+    const PAYMENT_PAID = 'successful';
     const PAYMENT_FAILED = 'failed';
 
 
