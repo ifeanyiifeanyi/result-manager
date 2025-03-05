@@ -10,16 +10,27 @@
         @else
             {{ config('app.name', 'Laravel') }}
         @endif
-        
+
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc." />
+    <meta name="description" content="{{ $school->meta_description ?? '' }}">
+    <meta name="keywords" content="{{ $school->meta_keywords ?? '' }}">
+
+
+    {{-- Browser Color and Theme --}}
+    <meta name="theme-color" content="{{ $school->navbar_color ?? '#ffffff' }}">
+    <meta name="msapplication-TileColor" content="{{ $school->navbar_color ?? '#ffffff' }}">
+
     <meta name="author" content="{{ config('app.name') }}" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     {{-- Add SweetAlert2 CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('adminsrc/assets/images/favicon.ico') }}">
+    {{-- Favicon --}}
+    @if ($school->favicon)
+        <link rel="icon" type="image/png" href="{{ asset($school->favicon) }}">
+        <link rel="apple-touch-icon" href="{{ asset($school->favicon) }}">
+    @endif
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 
     <!-- Datatables css -->
@@ -39,6 +50,33 @@
 
     <!-- Icons -->
     <link href="{{ asset('adminsrc/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+
+
+    {{-- Open Graph / Facebook Meta Tags --}}
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ $school->meta_title ?? config('app.name', 'Laravel') }}">
+    <meta property="og:description" content="{{ $school->meta_description ?? '' }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    @if($school->logo)
+        <meta property="og:image" content="{{ asset($school->logo) }}">
+    @endif
+    <meta property="og:site_name" content="{{ $school->name ?? config('app.name', 'Laravel') }}">
+
+    {{-- Twitter Card Meta Tags --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $school->meta_title ?? config('app.name', 'Laravel') }}">
+    <meta name="twitter:description" content="{{ $school->meta_description ?? '' }}">
+    @if($school->twitter)
+        <meta name="twitter:site" content="{{ '@' . last(explode('/', $school->twitter)) }}">
+    @endif
+    @if($school->logo)
+        <meta name="twitter:image" content="{{ asset($school->logo) }}">
+    @endif
+
+    {{-- Apple Specific Meta Tags --}}
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="{{ $school->name ?? config('app.name', 'Laravel') }}">
 
     @stack('styles')
 

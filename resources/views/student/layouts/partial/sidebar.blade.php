@@ -6,8 +6,8 @@
     <!-- sidebar close btn -->
 
     <a href="{{ route('student.dashboard') }}"
-        class="p-20 pb-10 text-center bg-white sidebar__logo position-sticky inset-block-start-0 w-100 z-1">
-        <img src="{{ asset('/studentsrc/assets/images/logo/logo.png') }}" alt="Logo">
+        class="p-20 pb-10 text-center bg-white sidebar__logo position-sticky inset-block-start-0 z-1">
+        <img src="{{ asset($school->logo ?? 'no-img.png') }}" alt="Logo" class="w-25">
     </a>
 
     <div class="overflow-y-auto sidebar-menu-wrapper scroll-sm">

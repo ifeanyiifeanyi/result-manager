@@ -40,14 +40,14 @@
                                     <span class="text">Account Settings</span>
                                 </a>
                             </li>
-                            <li class="mb-4">
+                            {{-- <li class="mb-4">
                                 <a href="analytics.html"
                                     class="gap-8 px-20 py-12 text-gray-300 text-15 hover-bg-gray-50 rounded-8 flex-align fw-medium">
                                     <span class="text-2xl text-primary-600 d-flex"><i
                                             class="ph ph-chart-line-up"></i></span>
                                     <span class="text">Daily Activity</span>
                                 </a>
-                            </li>
+                            </li> --}}
                             <li class="pt-8 border-gray-100 border-top">
                                 <a href="{{ route('student.logout') }}"
                                     class="gap-8 px-20 py-12 text-gray-300 text-15 hover-bg-danger-50 hover-text-danger-600 rounded-8 flex-align fw-medium">

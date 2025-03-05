@@ -13,6 +13,46 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {{-- Basic Meta Tags --}}
+    <title>{{ $school->meta_title ?? config('app.name', 'Laravel') }} | {{ $title }}</title>
+    <meta name="description" content="{{ $school->meta_description ?? '' }}">
+    <meta name="keywords" content="{{ $school->meta_keywords ?? '' }}">
+
+    {{-- Browser Color and Theme --}}
+    <meta name="theme-color" content="{{ $school->navbar_color ?? '#0038ff' }}">
+    <meta name="msapplication-TileColor" content="{{ $school->navbar_color ?? '#0038ff' }}">
+
+    {{-- Favicon --}}
+    @if ($school->favicon)
+        <link rel="icon" type="image/png" href="{{ asset($school->favicon) }}">
+        <link rel="apple-touch-icon" href="{{ asset($school->favicon) }}">
+    @endif
+
+    {{-- Open Graph / Facebook Meta Tags --}}
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ $school->meta_title ?? config('app.name', 'Laravel') }}">
+    <meta property="og:description" content="{{ $school->meta_description ?? '' }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    @if ($school->logo)
+        <meta property="og:image" content="{{ asset($school->logo) }}">
+    @endif
+    <meta property="og:site_name" content="{{ $school->name ?? 'Brightfield Academy' }}">
+
+    {{-- Twitter Card Meta Tags --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $school->meta_title ?? config('app.name', 'Laravel') }}">
+    <meta name="twitter:description" content="{{ $school->meta_description ?? '' }}">
+    @if ($school->twitter)
+        <meta name="twitter:site" content="{{ '@' . last(explode('/', $school->twitter)) }}">
+    @endif
+    @if ($school->logo)
+        <meta name="twitter:image" content="{{ asset($school->logo) }}">
+    @endif
+
+    {{-- Apple Specific Meta Tags --}}
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
     <style>
         :root {
             --primary-blue: #0038ff;
@@ -167,9 +207,11 @@
             0% {
                 transform: translateY(0);
             }
+
             50% {
                 transform: translateY(-5px);
             }
+
             100% {
                 transform: translateY(0);
             }
@@ -193,9 +235,11 @@
             0% {
                 transform: translateX(-50%) translateY(0);
             }
+
             50% {
                 transform: translateX(-50%) translateY(-5px);
             }
+
             100% {
                 transform: translateX(-50%) translateY(0);
             }
@@ -205,9 +249,11 @@
             0% {
                 transform: translateY(-50%) translateX(0);
             }
+
             50% {
                 transform: translateY(-50%) translateX(-5px);
             }
+
             100% {
                 transform: translateY(-50%) translateX(0);
             }
@@ -217,9 +263,11 @@
             0% {
                 transform: translateY(-50%) translateX(0);
             }
+
             50% {
                 transform: translateY(-50%) translateX(5px);
             }
+
             100% {
                 transform: translateY(-50%) translateX(0);
             }
@@ -340,10 +388,7 @@
 
 <body>
     <div class="p-0 container-fluid">
-        {{-- <div class="logo-container">
-            <span class="logo-icon"><i class="fas fa-lightbulb"></i></span>
-            <span class="logo-text">Brightfield Academy</span>
-        </div> --}}
+
 
         <div class="container">
             <div class="row card-container">
@@ -354,13 +399,13 @@
                     </div>
 
                     <div class="school-content">
-                        <h1 class="school-title">Brightfield Academy</h1>
+                        <h1 class="school-title">{{ $school->name ?? 'Brightfield Academy' }}</h1>
                         <p class="school-description">
-                            Empowering minds and shaping futures since 1995. Our institution is committed to academic
-                            excellence</p>
-
+                            {{ $school->short_description ?? 'Empowering minds and shaping futures since 1995. Our institution is committed to academic excellence' }}
+                        </p>
                         <div class="student-images">
-                            <span class="p-3 badge bg-light text-primary me-2 image-label label-top">Academic Excellence</span>
+                            <span class="p-3 badge bg-light text-primary me-2 image-label label-top">Academic
+                                Excellence</span>
                             <span class="p-3 badge bg-light text-primary me-2 image-label label-left">Innovation</span>
                             <span class="p-3 badge bg-light text-primary image-label label-right">Leadership</span>
                             <img src="{{ asset('IMG04846_(2).jpg') }}" alt="Student 3" class="student-image">
