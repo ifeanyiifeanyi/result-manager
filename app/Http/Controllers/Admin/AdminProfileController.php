@@ -9,12 +9,13 @@ use App\Services\SessionService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\ImageManager;
+use App\Services\StudentProfileService;
 use Illuminate\Support\Facades\Storage;
+
+use Intervention\Image\Drivers\Gd\Driver;
 use App\Http\Requests\AdminProfileUpdateRequest;
 use App\Http\Requests\AdminPasswordUpdateRequest;
-
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
 
 
 
@@ -23,12 +24,13 @@ class AdminProfileController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(SessionService $sessionService)
+    public function index(SessionService $sessionService, StudentProfileService $profileService)
     {
-        $user = request()->user();
+        $user = Auth::user(); // Use auth() helper instead of request()
         $sessions = $sessionService->getUserSessions($user->id);
-        return view('admin.profile.index', compact('user', 'sessions'));
-        //
+        $missingFields = $profileService->getMissingRequiredFields($user);
+
+        return view('admin.profile.index', compact('user', 'sessions', 'missingFields'));
     }
 
     /**
@@ -36,11 +38,12 @@ class AdminProfileController extends Controller
      */
     public function update(AdminProfileUpdateRequest $request)
     {
-        if ($request->validator->fails()) {
-            return to_route('admin.profile', ['tab' => 'edit'])
-                ->withErrors($request->validator)
-                ->withInput();
-        }
+        // if ($request->validator->fails()) {
+        //     return to_route('admin.profile', ['tab' => 'edit'])
+        //         ->withErrors($request->validator)
+        //         ->withInput();
+        // }
+
         request()->user()->update($request->validated());
         return to_route('admin.profile')->with('success', 'Profile updated successfully');
     }
@@ -50,11 +53,11 @@ class AdminProfileController extends Controller
      */
     public function updatePassword(AdminPasswordUpdateRequest $request)
     {
-        if ($request->validator->fails()) {
-            return to_route('admin.profile', ['tab' => 'password'])
-                ->withErrors($request->validator)
-                ->withInput();
-        }
+        // if ($request->validator->fails()) {
+        //     return to_route('admin.profile', ['tab' => 'password'])
+        //         ->withErrors($request->validator)
+        //         ->withInput();
+        // }
         $request->user()->update([
             'password' => Hash::make($request->password),
         ]);
@@ -95,7 +98,7 @@ class AdminProfileController extends Controller
         }
 
         // Update user photo
-        $user->update([
+        request()->user()->update([
             'photo' => $imagePath,
         ]);
 
@@ -108,7 +111,10 @@ class AdminProfileController extends Controller
         $manager = new ImageManager(new Driver());
 
         if ($imageData) {
-            // If we have image data from the form
+            // For data URLs from the cropper, we need to decode base64
+            $imageData = str_replace('data:image/jpeg;base64,', '', $imageData);
+            $imageData = str_replace('data:image/png;base64,', '', $imageData);
+            $imageData = base64_decode($imageData);
             $croppedImage = $manager->read($imageData);
         } else {
             // If no image data, use existing photo or default
@@ -116,9 +122,8 @@ class AdminProfileController extends Controller
             if ($user->photo && file_exists(public_path($user->photo))) {
                 $croppedImage = $manager->read(public_path($user->photo));
             } else {
-                
                 // Use a placeholder image
-                $croppedImage = $manager->read(public_path('images/no-img.png'));
+                $croppedImage = $manager->read(public_path('no-img.png'));
             }
         }
 
@@ -131,7 +136,7 @@ class AdminProfileController extends Controller
         );
 
         // Resize to standard size
-        $croppedImage->cover(300, 300);
+        $croppedImage->resize(300, 300);
 
         // Generate a unique filename
         $directory = 'uploads/profile_photos';
@@ -142,7 +147,7 @@ class AdminProfileController extends Controller
         $filename = $directory . '/profile_' . $userId . '_' . time() . '.jpg';
         $fullPath = public_path($filename);
 
-        // Save the file directly to public path
+        // Save the file with proper encoding - THIS IS THE FIX
         file_put_contents($fullPath, $croppedImage->toJpeg(80)->toString());
 
         return $filename; // Return the relative path

@@ -45,4 +45,8 @@ class AdminProfileUpdateRequest extends FormRequest
             'kin_contact_address' => ['nullable', 'string', 'max:255'],
         ];
     }
+    protected function getRedirectUrl()
+    {
+        return route('admin.profile', ['tab' => 'edit']);
+    }
 }

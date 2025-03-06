@@ -212,9 +212,9 @@
                 </table>
             </div>
             <!-- Pagination -->
-            <div class="d-flex justify-content-end">
+            {{-- <div class="d-flex justify-content-end">
                 {{ $students->links() }}
-            </div>
+            </div> --}}
         </div>
     </div>
 

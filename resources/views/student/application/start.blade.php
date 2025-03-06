@@ -46,7 +46,7 @@
                                 <h5>{{ __('Existing Application') }}</h5>
                                 <p>{{ __('You have already applied for this academic session.') }}</p>
                                 <div class="mt-3">
-                                    <a href="" class="btn btn-info btn-sm">
+                                    <a href="{{ route('student.application.status') }}" class="btn btn-info btn-sm">
                                         <i class="fas fa-eye me-1"></i> {{ __('View Status') }}
                                     </a>
                                 </div>

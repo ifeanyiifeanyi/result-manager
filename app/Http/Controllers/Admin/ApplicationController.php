@@ -21,14 +21,15 @@ class ApplicationController extends Controller
         return view('admin.application.index', compact('applications', 'academicSessions'));
     }
 
+   
     public function show(Application $application)
     {
         $application->load(['user', 'academicSession']);
 
         // Load application answers if they exist
-        // $answers = $application->answers()->with('question')->get();
+        $answers = $application->answers()->with('question')->get();
 
-        return view('admin.application.show', compact('application'));
+        return view('admin.application.show', compact('application', 'answers'));
     }
 
       /**

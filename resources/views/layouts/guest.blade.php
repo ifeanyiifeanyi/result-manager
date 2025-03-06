@@ -60,6 +60,12 @@
             --light-purple: #a4adff;
         }
 
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow-x: hidden;
@@ -67,9 +73,18 @@
             background-size: cover !important;
             background-repeat: no-repeat !important;
             background-position: center !important;
-            height: 100vh !important;
-            position: relative !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
+        .container-fluid {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            width: 100%;
+            padding: 20px;
         }
 
         .logo-container {
@@ -90,8 +105,9 @@
         }
 
         .card-container {
+            width: 100%;
             max-width: 1200px;
-            margin: 1rem auto;
+            margin: 0 auto;
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -366,11 +382,17 @@
         }
 
         @media (max-width: 992px) {
+            .container-fluid {
+                padding: 0;
+                align-items: flex-start;
+            }
+
             .card-container {
                 margin: 0;
                 max-width: 100%;
                 border-radius: 0;
                 box-shadow: none;
+                height: 100vh;
             }
 
             .left-side {
@@ -379,7 +401,10 @@
 
             .right-side {
                 padding: 2rem;
-                min-height: auto;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
         }
     </style>
@@ -388,8 +413,6 @@
 
 <body>
     <div class="p-0 container-fluid">
-
-
         <div class="container">
             <div class="row card-container">
                 <div class="p-0 col-lg-7 left-side">
@@ -424,10 +447,7 @@
                 </div>
             </div>
         </div>
-
     </div>
-
-
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -435,14 +455,16 @@
             const togglePassword = document.getElementById('togglePassword');
             const passwordField = document.getElementById('password');
 
-            togglePassword.addEventListener('click', function() {
-                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordField.setAttribute('type', type);
+            if (togglePassword && passwordField) {
+                togglePassword.addEventListener('click', function() {
+                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordField.setAttribute('type', type);
 
-                // Toggle eye icon
-                this.querySelector('i').classList.toggle('fa-eye');
-                this.querySelector('i').classList.toggle('fa-eye-slash');
-            });
+                    // Toggle eye icon
+                    this.querySelector('i').classList.toggle('fa-eye');
+                    this.querySelector('i').classList.toggle('fa-eye-slash');
+                });
+            }
         });
     </script>
 </body>

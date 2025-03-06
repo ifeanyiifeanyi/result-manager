@@ -15,7 +15,7 @@ use App\Http\Controllers\Student\ApplicationProcessController;
 use App\Http\Controllers\Student\StudentProfileController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 
@@ -73,6 +73,11 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
     Route::controller(ApplicationController::class)->group(function () {
         Route::get('applications', 'index')->name('admin.applications');
         Route::get('applications/{application}', 'show')->name('admin.applications.show');
+        Route::get('application/users/{application}', 'details')->name('admin.users.show');
+
+        Route::get('application/review/{application}', 'review')->name('admin.applications.review');
+        Route::get('application/approve/{application}', 'approve')->name('admin.applications.approve');
+        Route::get('application/deny/{application}', 'deny')->name('admin.applications.reject');
     });
 
     Route::controller(AdminStudentController::class)->group(function () {

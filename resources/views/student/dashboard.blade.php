@@ -16,6 +16,8 @@
                             <p class="mt-24 text-lg text-white fw-light">Start preparing your application, set your goals, and take the first step towards your future.</p>
                             @if($user->applications->isEmpty())
                                 <a href="{{ route('student.application.start') }}" class="mt-4 btn btn-info">Start Application <i class="fas fa-arrow-right"></i> </a>
+                            @else
+                                <a href="{{ route('student.application.status') }}" class="btn btn-success"><i class="fas fa-memory-card"></i> View Result</a>
                             @endif
                         </div>
                     </div>
